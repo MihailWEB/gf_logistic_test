@@ -65,7 +65,7 @@ composer-dump-autoload:
 	$(COMPOSER) dump-autoload
 
 unittest:
-	$(EXEC_PHP) vendor/bin/paratest
+	$(EXEC_PHP) vendor/bin/phpunit
 
 reset-roles:
 	$(ARTISAN) db:seed --class=RolesAndPermissions
