@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
-use App\Events\DeliveryDelivered;
 use App\Models\Delivery;
-use DB;
 use Illuminate\Support\Facades\Event;
 
 class DeliveryTest extends TestCase
@@ -17,13 +17,16 @@ class DeliveryTest extends TestCase
 
         Event::fake();
 
-        $this->delivery = Delivery::factory()->create();
+        $this->delivery = Delivery::factory()->create(['status' => 'planned']);
     }
 
     public function testCorrectFlow()
     {
+        // @TODO любой return вызывает ошибку Allowed memory size
+
         // Отгрузка
         $response = $this->post('deliveries/' . $this->delivery->id . '/status-change', ['status' => 'shipped']);
+        fwrite(STDERR, print_r($response, true));
         $response->assertOk();
         $this->assertDatabaseHas('deliveries', ['id' => $this->delivery->id, 'status' => 'shipped']);
 
@@ -32,4 +35,9 @@ class DeliveryTest extends TestCase
         $response->assertOk();
         $this->assertDatabaseHas('deliveries', ['id' => $this->delivery->id, 'status' => 'delivered']);
     }
+
+    /**
+     * @TODO добавить все кейсы с изменением на ошибочный статус, в т.ч. создание сразу с нужным статусом
+     * также передать несуществующий статус и статус другого типа
+     */
 }
