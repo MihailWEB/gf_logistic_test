@@ -13,24 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DeliveryController extends Controller
 {
-    // @TODO response возвращать что-то нормальное
     public function statusChange(ChangeStatusRequest $request, Delivery $delivery)
     {
         $validatedData = $request->validated();
         $deliveryService = new DeliveryService($delivery);
 
         if (!$deliveryService->changeStatus($validatedData['status'])) {
-            // @TODO любой return вызывает ошибку Allowed memory size
-            echo 'error';
-            exit();
-
-            return response()->json('error', Response::HTTP_OK);
+            return response()->json(['result' => 'error'], Response::HTTP_OK);
         }
 
-        // @TODO любой return вызывает ошибку Allowed memory size
-        echo 'success';
-        exit();
-
-        return response()->json('success', Response::HTTP_OK);
+        return response()->json(['result' => 'success'], Response::HTTP_OK);
     }
 }

@@ -22,11 +22,8 @@ class DeliveryTest extends TestCase
 
     public function testCorrectFlow()
     {
-        // @TODO любой return вызывает ошибку Allowed memory size
-
         // Отгрузка
         $response = $this->post('deliveries/' . $this->delivery->id . '/status-change', ['status' => 'shipped']);
-        fwrite(STDERR, print_r($response, true));
         $response->assertOk();
         $this->assertDatabaseHas('deliveries', ['id' => $this->delivery->id, 'status' => 'shipped']);
 
